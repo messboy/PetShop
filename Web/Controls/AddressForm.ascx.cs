@@ -10,7 +10,7 @@ namespace PetShop.Web {
 		/// </summary>
 		public AddressInfo Address {
 			get {
-
+                
                 // Return null if control is empty
                 if (string.IsNullOrEmpty(txtFirstName.Text) && 
                    string.IsNullOrEmpty(txtLastName.Text) && 

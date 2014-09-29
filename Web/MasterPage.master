@@ -58,7 +58,10 @@
                                     <tr>
                                         <td nowrap="nowrap"><a href="ShoppingCart.aspx"><img border="0" src="Comm_Images/button-cart-grey.gif"></a></td>
                                         <td nowrap="nowrap"><a class="linkCheckOut" href="ShoppingCart.aspx">check out</a></td>
-                                        <td nowrap="nowrap" class="CartInfo" width="100%" >&nbsp;</td>                                        
+
+                                        <td nowrap="nowrap"><a href="WishList.aspx"><img border="0" src="Comm_Images/button-wishlist-grey.gif"></a></td>
+                                        <td nowrap="nowrap"><a class="linkCheckOut" href="RecordList.aspx">Record list</a></td>
+
                                         <td nowrap="nowrap"><a href="WishList.aspx"><img border="0" src="Comm_Images/button-wishlist-grey.gif"></a></td>
                                         <td nowrap="nowrap"><a class="linkCheckOut" href="WishList.aspx">wish list</a></td>
                                     </tr>

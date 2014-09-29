@@ -13,5 +13,13 @@ namespace MVCweb
         {
 
         }
+
+        /// <summary>
+        /// Redirect to Search page
+        /// </summary>
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            WebUtility.SearchRedirect(txtSearch.Text);
+        }
     }
 }

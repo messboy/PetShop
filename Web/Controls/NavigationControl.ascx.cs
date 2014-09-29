@@ -2,6 +2,7 @@ using System;
 using System.Web.UI.WebControls;
 using PetShop.BLL;
 using PetShop.CacheDependencyFactory;
+using System.Data;
 
 namespace PetShop.Web {
     public partial class NavigationControl : System.Web.UI.UserControl {
@@ -41,7 +42,7 @@ namespace PetShop.Web {
                 HiddenField hidCategoryId = (HiddenField)item.FindControl("hidCategoryId");
                 if(hidCategoryId.Value.ToLower() == categoryId.ToLower()) {
                     HyperLink lnkCategory = (HyperLink)item.FindControl("lnkCategory");
-                    lnkCategory.ForeColor = System.Drawing.Color.FromArgb(199, 116, 3);
+                    //lnkCategory.ForeColor = System.Drawing.Color.FromArgb(199, 116, 3);
                     break;
                 }
             }
@@ -53,5 +54,29 @@ namespace PetShop.Web {
             repCategories.DataSource = category.GetCategories();
             repCategories.DataBind();            
         }
-    }
+
+        protected void repCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //§ä¤l¼h 
+            Repeater rpChild = e.Item.FindControl("repChildCategories") as Repeater;
+            //get category id
+            HiddenField hdnSec = e.Item.FindControl("hidCategoryId") as HiddenField; 
+
+
+            if (hdnSec != null)
+            {
+                string categoryKey = hdnSec.Value.ToString();
+                //bind data
+                BindSubCategories(rpChild, categoryKey);
+            }
+            
+        }
+
+        private void BindSubCategories(Repeater rpChild, string categoryKey)
+        {
+            Product product = new Product();
+            rpChild.DataSource = product.GetProductsByCategory(categoryKey);
+            rpChild.DataBind();
+        }
+}
 }

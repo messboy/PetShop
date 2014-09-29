@@ -2,8 +2,25 @@
 <%@ Import Namespace="System.Diagnostics" %>
 <%@ Import Namespace="System.Web" %>
 <%@ Import Namespace="PetShop.Model" %>
+<%@ Import Namespace="System.Web.Mvc" %> 
+<%@ Import Namespace="System.Web.Routing" %>
 
 <script RunAt="server">
+
+    public void RegisterGlobalFilters(GlobalFilterCollection filters)
+    {
+        filters.Add(new HandleErrorAttribute());
+    }
+
+    public static void RegisterRoutes(RouteCollection routes)
+    {
+        routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+        routes.MapRoute("Home",
+        "home/{action}/{id}",
+        new { controller = "Home", action = "Index", id = UrlParameter.Optional });
+    }
+
     // Carry over profile property values from an anonymous to an authenticated state 
     void Profile_MigrateAnonymous(Object sender, ProfileMigrateEventArgs e) {
         ProfileCommon anonProfile = Profile.GetProfile(e.AnonymousID);
@@ -34,6 +51,8 @@
 
     protected void Application_Start(object sender, EventArgs e)
     {
+        RegisterGlobalFilters(GlobalFilters.Filters);
+        RegisterRoutes(RouteTable.Routes);
         ScriptManager.ScriptResourceMapping.AddDefinition("jquery",
             new ScriptResourceDefinition
             {
