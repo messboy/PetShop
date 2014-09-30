@@ -5,6 +5,7 @@ using PetShop.BLL;
 using System.Web.Caching;
 using PetShop.CacheDependencyFactory;
 using System.Configuration;
+using System.Web.UI;
 
 namespace PetShop.Web {
     /// <summary>
@@ -117,6 +118,18 @@ namespace PetShop.Web {
             }
 
             return data;
+        }
+
+        public static bool HideUserControl(string ucControlName)
+        {
+            Page currentPage = (Page)HttpContext.Current.Handler;
+            Control nvaControl = currentPage.Master.FindControl(ucControlName) as Control;
+            if (nvaControl != null)
+            {
+                nvaControl.Visible = false;
+                return true;
+            }
+            return false;
         }
     }
 }

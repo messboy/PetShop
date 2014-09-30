@@ -24,5 +24,7 @@ namespace PetShop.IDAL{
 		/// <param name="orderId">Unique identifier for an order</param>
 		/// <returns>Business entity representing the order</returns>
 		OrderInfo GetOrder(int orderId);
-	}
+
+        void Update(OrderInfo order);
+    }
 }

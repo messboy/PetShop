@@ -225,5 +225,11 @@ namespace PetShop.OracleDAL {
 
             return parms;
         }
+
+
+        public void Update(OrderInfo order)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

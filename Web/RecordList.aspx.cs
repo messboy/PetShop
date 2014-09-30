@@ -1,6 +1,7 @@
 ﻿using NLog;
 using PetShop.DBUtility;
 using PetShop.Model;
+using PetShop.Web;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,47 +27,7 @@ public partial class RecordList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        //
-        
-        //讀取個人紀錄
-
-        IList<OrderInfo> orderList = new List<OrderInfo>();
-
-        //Create a parameter
-        MembershipUser user = Membership.GetUser();
-        SqlParameter parm = new SqlParameter("@UserId", SqlDbType.VarChar);
-        parm.Value = user.UserName.ToString();
-
-        //Execute a query to read the categories
-        try
-        {
-            using (SqlDataReader rdr = SqlHelper.ExecuteReader(SqlHelper.ConnectionStringOrderDistributedTransaction, CommandType.Text, SQL_SELECT_ORDER, parm))
-            {
-                while (rdr.Read())
-                {
-                    //Generate an order header from the first row
-                    AddressInfo billingAddress = new AddressInfo(null, null, rdr.GetString(5), null, null, null, null, null, null, "email");
-                    AddressInfo shippingAddress = new AddressInfo(null, null, rdr.GetString(13), null, null, null, null, null, null, "email");
-
-                    OrderInfo cat = new OrderInfo(rdr.GetInt32(0), rdr.GetDateTime(1), rdr.GetString(2), null, billingAddress, shippingAddress, rdr.GetDecimal(19), null, null);
-                    orderList.Add(cat);
-                }
-            }  
-
-        }
-        catch (Exception)
-        {
-            
-            throw;
-        }
-
-        //欄位自動換行
-        gvRecord.Attributes.Add("style", "word-break:break-all;word-wrap:break-word");
-
-        //繫結data
-        gvRecord.DataSource = orderList;
-        gvRecord.DataBind();
-
+        RenderList();
     }
 
     protected void gvRecord_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -120,5 +81,52 @@ public partial class RecordList : System.Web.UI.Page
             trans.Dispose();
         } // finally
 
+    }
+
+    protected void Page_PreRender(object sender, EventArgs e)
+    {
+        RenderList();
+    }
+
+    private void RenderList()
+    {
+        //讀取個人紀錄
+
+        IList<OrderInfo> orderList = new List<OrderInfo>();
+
+        //Create a parameter
+        MembershipUser user = Membership.GetUser();
+        SqlParameter parm = new SqlParameter("@UserId", SqlDbType.VarChar);
+        parm.Value = user.UserName.ToString();
+
+        //Execute a query to read the categories
+        try
+        {
+            using (SqlDataReader rdr = SqlHelper.ExecuteReader(SqlHelper.ConnectionStringOrderDistributedTransaction, CommandType.Text, SQL_SELECT_ORDER, parm))
+            {
+                while (rdr.Read())
+                {
+                    //Generate an order header from the first row
+                    AddressInfo billingAddress = new AddressInfo(null, null, rdr.GetString(5), null, null, null, null, null, null, "email");
+                    AddressInfo shippingAddress = new AddressInfo(null, null, rdr.GetString(13), null, null, null, null, null, null, "email");
+
+                    OrderInfo cat = new OrderInfo(rdr.GetInt32(0), rdr.GetDateTime(1), rdr.GetString(2), null, billingAddress, shippingAddress, rdr.GetDecimal(19), null, null);
+                    orderList.Add(cat);
+                }
+            }
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+        //欄位自動換行
+        gvRecord.Attributes.Add("style", "word-break:break-all;word-wrap:break-word");
+
+        //繫結data
+        gvRecord.DataSource = orderList;
+        gvRecord.DataBind();
     }
 }

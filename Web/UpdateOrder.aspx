@@ -1,7 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="UpdateOrder.aspx.cs" Inherits="UpdateOrder" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterWithOutNav.master" AutoEventWireup="true" CodeFile="UpdateOrder.aspx.cs" Inherits="UpdateOrder" %>
+
+<%@ Register Src="~/Controls/AddressForm.ascx" TagPrefix="uc1" TagName="AddressForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cphPage" Runat="Server">
-    <asp:DetailsView ID="DetailsView1" runat="server" Height="1050px" Width="608px" AutoGenerateRows="False" DataKeyNames="OrderId" DefaultMode="Edit" BackColor="White" BorderColor="#E7E7FF" BorderStyle="None" BorderWidth="1px" CellPadding="3" GridLines="Horizontal" DataSourceID="SqlDataSource2">
+<%--    <asp:DetailsView ID="DetailsView1" runat="server" Height="1050px" Width="608px" AutoGenerateRows="False" DataKeyNames="OrderId" DefaultMode="Edit" BackColor="White" BorderColor="#E7E7FF" BorderStyle="None" BorderWidth="1px" CellPadding="3" GridLines="Horizontal" DataSourceID="SqlDataSource2">
         <AlternatingRowStyle BackColor="#F7F7F7" />
         <EditRowStyle BackColor="#738A9C" Font-Bold="True" ForeColor="#F7F7F7" />
         <Fields>
@@ -91,6 +93,17 @@
             <asp:Parameter Name="Locale" Type="String" />
             <asp:Parameter Name="OrderId" Type="Int32" />
         </UpdateParameters>
-    </asp:SqlDataSource>
+    </asp:SqlDataSource>--%>
+    <div class="label">
+    <asp:Label ID="Label1" runat="server" Text="Billing Address" Font-Size="Large"></asp:Label>
+        </div>
+    <uc1:AddressForm runat="server" ID="BillingAddressForm" />
+
+    <hr/>
+    <div class="label">
+    <asp:Label ID="Label2" runat="server" Text="Shipping Address" Font-Size="Large"></asp:Label>
+        </div>
+    <uc1:AddressForm runat="server" ID="ShippingAddressForm" />
+    <asp:Button ID="update" runat="server" Text="更新" Height="33px" OnClick="update_Click" Width="92px" />
 </asp:Content>
 

@@ -12,9 +12,37 @@ namespace PetShop.SQLServerDAL {
     public class Order : IOrder {
 
         //Static constants
-		private const string SQL_INSERT_ORDER = "Declare @ID int; Declare @ERR int; INSERT INTO Orders VALUES(@UserId, @Date, @ShipAddress1, @ShipAddress2, @ShipCity, @ShipState, @ShipZip, @ShipCountry, @BillAddress1, @BillAddress2, @BillCity, @BillState, @BillZip, @BillCountry, 'UPS', @Total, @BillFirstName, @BillLastName, @ShipFirstName, @ShipLastName, @AuthorizationNumber, 'US_en'); SELECT @ID=@@IDENTITY; INSERT INTO OrderStatus VALUES(@ID, @ID, GetDate(), 'P'); SELECT @ERR=@@ERROR;";
+        private const string SQL_INSERT_ORDER = "Declare @ID int; Declare @ERR int; INSERT INTO Orders VALUES(@UserId, @Date, @ShipAddress1, @ShipAddress2, @ShipCity, @ShipState, @ShipZip, @ShipCountry, @BillAddress1, @BillAddress2, @BillCity, @BillState, @BillZip, @BillCountry, 'UPS', @Total, @BillFirstName, @BillLastName, @ShipFirstName, @ShipLastName, @AuthorizationNumber, 'US_en', @BillEmail, @BillPhone, @ShipEmail, @ShipPhone); SELECT @ID=@@IDENTITY; INSERT INTO OrderStatus VALUES(@ID, @ID, GetDate(), 'P'); SELECT @ERR=@@ERROR;";
         private const string SQL_INSERT_ITEM = "INSERT INTO LineItem VALUES( ";
-        private const string SQL_SELECT_ORDER = "SELECT o.OrderDate, o.UserId, o.CardType, o.CreditCard, o.ExprDate, o.BillToFirstName, o.BillToLastName, o.BillAddr1, o.BillAddr2, o.BillCity, o.BillState, BillZip, o.BillCountry, o.ShipToFirstName, o.ShipToLastName, o.ShipAddr1, o.ShipAddr2, o.ShipCity, o.ShipState, o.ShipZip, o.ShipCountry, o.TotalPrice, l.ItemId, l.LineNum, l.Quantity, l.UnitPrice FROM Orders as o, lineitem as l WHERE o.OrderId = @OrderId AND o.orderid = l.orderid";
+        private const string SQL_SELECT_ORDER = "SELECT o.OrderDate, o.UserId, o.BillToFirstName, o.BillToLastName, o.BillAddr1, o.BillAddr2, o.BillCity, o.BillState, BillZip, o.BillCountry, o.ShipToFirstName, o.ShipToLastName, o.ShipAddr1, o.ShipAddr2, o.ShipCity, o.ShipState, o.ShipZip, o.ShipCountry, o.TotalPrice, o.BillEmail, o.BillPhone, o.ShipEmail, o.ShipPhone, l.ItemId, l.LineNum, l.Quantity, l.UnitPrice FROM Orders as o, lineitem as l WHERE o.OrderId = @OrderId AND o.orderid = l.orderid";
+
+        public const string SQL_UPDATE_ORDER = @"UPDATE [MSPetShop4Orders].[dbo].[Orders]
+   SET 
+      [ShipAddr1] = @ShipAddress1
+      ,[ShipAddr2] = @ShipAddress2
+      ,[ShipCity] = @ShipCity
+      ,[ShipState] = @ShipState
+      ,[ShipZip] = @ShipZip
+      ,[ShipCountry] = @ShipCountry
+      ,[BillAddr1] = @BillAddress1
+      ,[BillAddr2] = @BillAddress2
+      ,[BillCity] = @BillCity
+      ,[BillState] = @BillState
+      ,[BillZip] = @BillZip
+      ,[BillCountry] = @BillCountry
+      ,[Courier] = 'UPS'
+      ,[BillToFirstName] = @BillFirstName
+      ,[BillToLastName] =  @BillLastName
+      ,[ShipToFirstName] = @ShipFirstName
+      ,[ShipToLastName] = @ShipLastName
+
+      ,[Locale] =  'US_en' 
+      ,[BillEmail] = @BillEmail
+      ,[BillPhone] = @BillPhone
+      ,[ShipEmail] = @ShipEmail
+      ,[ShipPhone] = @ShipPhone
+        WHERE OrderId = @OrderId";
+
         private const string PARM_USER_ID = "@UserId";
         private const string PARM_DATE = "@Date";
         private const string PARM_SHIP_ADDRESS1 = "@ShipAddress1";
@@ -40,6 +68,10 @@ namespace PetShop.SQLServerDAL {
         private const string PARM_ITEM_ID = "@ItemId";
         private const string PARM_QUANTITY = "@Quantity";
         private const string PARM_PRICE = "@Price";
+        private const string PARM_BILL_EMAIL = "@BillEmail";
+        private const string PARM_BILL_PHONE = "@BillPhone";
+        private const string PARM_SHIP_EMAIL = "@ShipEmail";
+        private const string PARM_SHIP_PHONE = "@ShipPhone";
 
         public void Insert(OrderInfo order) {
             StringBuilder strSQL = new StringBuilder();
@@ -70,6 +102,10 @@ namespace PetShop.SQLServerDAL {
             orderParms[17].Value = order.ShippingAddress.FirstName;
             orderParms[18].Value = order.ShippingAddress.LastName;
 			orderParms[19].Value = order.AuthorizationNumber.Value;
+            orderParms[20].Value = order.BillingAddress.Email;
+            orderParms[23].Value = order.BillingAddress.Phone;
+            orderParms[22].Value = order.ShippingAddress.Email;
+            orderParms[21].Value = order.ShippingAddress.Phone;
 
             foreach (SqlParameter parm in orderParms)
                 cmd.Parameters.Add(parm);
@@ -116,6 +152,87 @@ namespace PetShop.SQLServerDAL {
             }
         }
 
+        public void Update(OrderInfo order)
+        {
+            StringBuilder strSQL = new StringBuilder();
+
+
+            SqlCommand cmd = new SqlCommand();
+
+            // Get each commands parameter arrays
+            SqlParameter[] orderParms = new SqlParameter[] {
+                     new SqlParameter("@OrderId", SqlDbType.Int),
+					new SqlParameter(PARM_SHIP_ADDRESS1, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_ADDRESS2, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_CITY, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_STATE, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_ZIP, SqlDbType.VarChar, 50),
+					new SqlParameter(PARM_SHIP_COUNTRY, SqlDbType.VarChar, 50),
+					new SqlParameter(PARM_BILL_ADDRESS1, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_BILL_ADDRESS2, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_BILL_CITY, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_BILL_STATE, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_BILL_ZIP, SqlDbType.VarChar, 50),
+					new SqlParameter(PARM_BILL_COUNTRY, SqlDbType.VarChar, 50),
+					new SqlParameter(PARM_BILL_FIRST_NAME, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_BILL_LAST_NAME, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_FIRST_NAME, SqlDbType.VarChar, 80),
+					new SqlParameter(PARM_SHIP_LAST_NAME, SqlDbType.VarChar, 80),
+                    new SqlParameter(PARM_BILL_EMAIL, SqlDbType.VarChar, 200),
+					new SqlParameter(PARM_BILL_PHONE, SqlDbType.VarChar, 10),
+					new SqlParameter(PARM_SHIP_EMAIL, SqlDbType.VarChar, 200),
+					new SqlParameter(PARM_SHIP_PHONE, SqlDbType.VarChar, 10)
+                    };
+
+            // Set up the parameters
+            orderParms[0].Value = order.OrderId;
+            orderParms[1].Value = order.ShippingAddress.Address1;
+            orderParms[2].Value = order.ShippingAddress.Address2;
+            orderParms[3].Value = order.ShippingAddress.City;
+            orderParms[4].Value = order.ShippingAddress.State;
+            orderParms[5].Value = order.ShippingAddress.Zip;
+            orderParms[6].Value = order.ShippingAddress.Country;
+            orderParms[7].Value = order.BillingAddress.Address1;
+            orderParms[8].Value = order.BillingAddress.Address2;
+            orderParms[9].Value = order.BillingAddress.City;
+            orderParms[10].Value = order.BillingAddress.State;
+            orderParms[11].Value = order.BillingAddress.Zip;
+            orderParms[12].Value = order.BillingAddress.Country;
+            orderParms[13].Value = order.BillingAddress.FirstName;
+            orderParms[14].Value = order.BillingAddress.LastName;
+            orderParms[15].Value = order.ShippingAddress.FirstName;
+            orderParms[16].Value = order.ShippingAddress.LastName;
+            orderParms[17].Value = order.BillingAddress.Email;
+            orderParms[18].Value = order.BillingAddress.Phone;
+            orderParms[19].Value = order.ShippingAddress.Email;
+            orderParms[20].Value = order.ShippingAddress.Phone;
+            
+
+            foreach (SqlParameter parm in orderParms)
+                cmd.Parameters.Add(parm);
+            // Update the order status
+            strSQL.Append(SQL_UPDATE_ORDER);
+
+            using (SqlConnection conn = new SqlConnection(SqlHelper.ConnectionStringOrderDistributedTransaction))
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = strSQL.ToString();
+                try
+                {
+                    //更新資料
+                    var r = cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    //紀錄例外
+                    throw;
+                }
+                
+            }
+        }
+
         /// <summary>
         /// Read an order from the database
         /// </summary>
@@ -135,17 +252,51 @@ namespace PetShop.SQLServerDAL {
                 if (rdr.Read()) {
 
                     //Generate an order header from the first row
-                    AddressInfo billingAddress = new AddressInfo(rdr.GetString(5), rdr.GetString(6), rdr.GetString(7), rdr.GetString(8), rdr.GetString(9), rdr.GetString(10), rdr.GetString(11), rdr.GetString(12), null, "email");
-                    AddressInfo shippingAddress = new AddressInfo(rdr.GetString(13), rdr.GetString(14), rdr.GetString(15), rdr.GetString(16), rdr.GetString(17), rdr.GetString(18), rdr.GetString(19), rdr.GetString(20), null, "email");
+                    AddressInfo billingAddress = new AddressInfo(
+                            rdr["BillToFirstName"].ToString(),
+                            rdr["BillToLastName"].ToString(),
+                            rdr["BillAddr1"].ToString(),
+                            rdr["BillAddr2"].ToString(),
+                            rdr["BillCity"].ToString(),
+                            rdr["BillState"].ToString(),
+                            rdr["BillZip"].ToString(), 
+                            rdr["BillCountry"].ToString(),
+                            rdr["BillPhone"].ToString(),
+                            rdr["BillEmail"].ToString());
 
-                    order = new OrderInfo(orderId, rdr.GetDateTime(0), rdr.GetString(1), null, billingAddress, shippingAddress, rdr.GetDecimal(21), null, null);
+                    AddressInfo shippingAddress = new AddressInfo(
+                            rdr["ShipToFirstName"].ToString(),
+                            rdr["ShipToLastName"].ToString(),
+                            rdr["ShipAddr1"].ToString(),
+                            rdr["ShipAddr2"].ToString(),
+                            rdr["ShipCity"].ToString(),
+                            rdr["ShipState"].ToString(),
+                            rdr["ShipZip"].ToString(),
+                            rdr["ShipCountry"].ToString(),
+                            rdr["BillPhone"].ToString(),
+                             rdr["BillEmail"].ToString());
+
+                    order = new OrderInfo(
+                            orderId, 
+                            (DateTime)rdr["OrderDate"],
+                            rdr["UserId"].ToString(), 
+                            null, 
+                            billingAddress, 
+                            shippingAddress, 
+                            (decimal)rdr["TotalPrice"], 
+                            null, null);
 
                     IList<LineItemInfo> lineItems = new List<LineItemInfo>();
                     LineItemInfo item = null;
 
                     //Create the lineitems from the first row and subsequent rows
                     do {
-                        item = new LineItemInfo(rdr.GetString(22), string.Empty, rdr.GetInt32(23), rdr.GetInt32(24), rdr.GetDecimal(25));
+                        item = new LineItemInfo(
+                            rdr["ItemId"].ToString(), 
+                            string.Empty,
+                            (int)rdr["LineNum"],
+                            (int)rdr["Quantity"],
+                            (decimal)rdr["UnitPrice"]);
                         lineItems.Add(item);
                     } while (rdr.Read());
 
@@ -185,7 +336,11 @@ namespace PetShop.SQLServerDAL {
 					new SqlParameter(PARM_BILL_LAST_NAME, SqlDbType.VarChar, 80),
 					new SqlParameter(PARM_SHIP_FIRST_NAME, SqlDbType.VarChar, 80),
 					new SqlParameter(PARM_SHIP_LAST_NAME, SqlDbType.VarChar, 80),
-					new SqlParameter(PARM_AUTHORIZATION_NUMBER, SqlDbType.Int)};
+					new SqlParameter(PARM_AUTHORIZATION_NUMBER, SqlDbType.Int),
+                    new SqlParameter(PARM_BILL_EMAIL, SqlDbType.VarChar, 200),
+					new SqlParameter(PARM_BILL_PHONE, SqlDbType.VarChar, 10),
+					new SqlParameter(PARM_SHIP_EMAIL, SqlDbType.VarChar, 200),
+					new SqlParameter(PARM_SHIP_PHONE, SqlDbType.VarChar, 10),};
 
                 SqlHelper.CacheParameters(SQL_INSERT_ORDER, parms);
             }
@@ -208,5 +363,10 @@ namespace PetShop.SQLServerDAL {
 
             return parms;
         }
+
+
+
+
+        
     }
 }

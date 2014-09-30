@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="RecordList.aspx.cs" Inherits="RecordList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterWithOutNav.master" AutoEventWireup="true" CodeFile="RecordList.aspx.cs" Inherits="RecordList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cphPage" Runat="Server">
     <asp:GridView ID="gvRecord" runat="server" AllowPaging="True" 
@@ -7,13 +7,13 @@
         BorderWidth="2px" CellPadding="3" CellSpacing="1" 
         DataKeyNames="OrderId"  GridLines="None" 
         OnPageIndexChanging="gvRecord_PageIndexChanging" PageSize="7" 
-        OnRowDeleting="gvRecord_RowDeleting" Width="566px" >
+        OnRowDeleting="gvRecord_RowDeleting" Width="630px" >
         <Columns>
             <asp:BoundField DataField="OrderId" HeaderText="訂單編號" InsertVisible="False" ReadOnly="True" SortExpression="OrderId" HeaderStyle-HorizontalAlign="Left">
             <ItemStyle Width="80px" />
             </asp:BoundField>
-            <asp:BoundField DataField="Date" DataFormatString="{0:d}" HeaderText="訂購日期" SortExpression="OrderDate" HeaderStyle-HorizontalAlign="Left">
-            <ItemStyle Width="110px" />
+            <asp:BoundField DataField="Date" DataFormatString="{0:d}" HeaderText="訂購日期" SortExpression="OrderDate" HeaderStyle-HorizontalAlign="Center">
+            <ItemStyle Width="120px" />
             </asp:BoundField>
 <%--            <asp:TemplateField HeaderText="帳單地址" SortExpression="ShipAddr1">
                 <ItemTemplate>
@@ -32,7 +32,7 @@
 
             <asp:TemplateField >
                 <ItemTemplate>
-                    <ItemStyle Width="110px" />
+                    <ItemStyle Width="80px" />
                     <asp:HyperLink ID="LinkButton1" runat="server"  Text="更新訂單"
                         NavigateUrl='<%# string.Format("~/UpdateOrder.aspx?OrderId={0}", Eval("OrderId")) %>'>
                         <input id="Button1" type="button" value="更新訂單" />

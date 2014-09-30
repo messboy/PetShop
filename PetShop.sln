@@ -92,8 +92,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Membership", "Membership\Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableCacheDependency", "TableCacheDependency\TableCacheDependency.csproj", "{F55AB6DD-E0DC-4966-8E6A-B89E161C964F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCweb", "MVCweb\MVCweb.csproj", "{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -324,16 +322,6 @@ Global
 		{F55AB6DD-E0DC-4966-8E6A-B89E161C964F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F55AB6DD-E0DC-4966-8E6A-B89E161C964F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F55AB6DD-E0DC-4966-8E6A-B89E161C964F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Release|.NET.ActiveCfg = Release|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9BAA1814-FFA3-4ABE-BB54-0BF3B99E4CE6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

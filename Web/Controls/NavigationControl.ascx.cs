@@ -1,8 +1,9 @@
 using System;
 using System.Web.UI.WebControls;
-using PetShop.BLL;
+
 using PetShop.CacheDependencyFactory;
 using System.Data;
+using PetShop.BLL;
 
 namespace PetShop.Web {
     public partial class NavigationControl : System.Web.UI.UserControl {

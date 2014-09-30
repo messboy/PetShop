@@ -101,7 +101,7 @@
         });
     });
 </script>
-
+<asp:PlaceHolder ID="nav" runat="server">
 <div class="tree well">
     <ul style="padding-left: 0px;">
         <asp:Repeater ID="repCategories" runat="server" OnItemDataBound="repCategories_ItemDataBound">
@@ -124,6 +124,9 @@
         </asp:Repeater>
     </ul>
 </div>
+        
+    </asp:Repeater>
+    </asp:PlaceHolder>
 <%-- <asp:Repeater ID="repCategories" runat="server">
     <HeaderTemplate>
         <table cellspacing="0" border="0" style="border-collapse: collapse;">

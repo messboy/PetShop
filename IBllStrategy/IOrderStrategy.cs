@@ -9,5 +9,7 @@ namespace PetShop.IBLLStrategy
     public interface IOrderStrategy  {
 
         void Insert(PetShop.Model.OrderInfo order);
+
+        void Update(PetShop.Model.OrderInfo order);
     }
 }

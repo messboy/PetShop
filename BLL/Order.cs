@@ -38,6 +38,11 @@ namespace PetShop.BLL
             orderInsertStrategy.Insert(order);
         }
 
+        public void Update(OrderInfo order)
+        {
+            orderInsertStrategy.Update(order);
+        }
+
         /// <summary>
         /// Process credit card and get authorization number. 
         /// </summary>
@@ -90,5 +95,7 @@ namespace PetShop.BLL
             // Using the evidence given in the config file load the appropriate assembly and class
             return (PetShop.IBLLStrategy.IOrderStrategy)Assembly.Load(path).CreateInstance(className);
         }
+
+       
     }
 }

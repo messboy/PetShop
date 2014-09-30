@@ -21,5 +21,11 @@ namespace PetShop.BLL
 
             asynchOrder.Send(order);
         }
+
+
+        public void Update(Model.OrderInfo order)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
