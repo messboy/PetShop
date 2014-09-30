@@ -3,6 +3,7 @@ using System;
 //References to PetShop specific libraries
 //PetShop busines entity library
 using PetShop.Model;
+using System.Collections.Generic;
 
 namespace PetShop.IDAL{
 	
@@ -26,5 +27,10 @@ namespace PetShop.IDAL{
 		OrderInfo GetOrder(int orderId);
 
         void Update(OrderInfo order);
+
+
+        List<OrderInfo> GetOrderByUserId(string UserId);
+
+        void Delete(int orderId);
     }
 }

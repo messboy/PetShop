@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Transactions;
 using PetShop.Model;
 using PetShop.IDAL;
+using System.Collections.Generic;
 
 namespace PetShop.BLL
 {
@@ -43,6 +44,11 @@ namespace PetShop.BLL
             orderInsertStrategy.Update(order);
         }
 
+        public void Delete(int orderId)
+        {
+            orderInsertStrategy.Delete(orderId);
+        }
+
         /// <summary>
         /// Process credit card and get authorization number. 
         /// </summary>
@@ -74,6 +80,11 @@ namespace PetShop.BLL
             return dal.GetOrder(orderId);
         }
 
+        public IList<OrderInfo> GetOrderByUserId(string UserId)
+        {
+            return dal.GetOrderByUserId(UserId);
+        }
+
         /// <summary>
         /// Method to process asynchronous order from the queue
         /// </summary>
@@ -96,6 +107,5 @@ namespace PetShop.BLL
             return (PetShop.IBLLStrategy.IOrderStrategy)Assembly.Load(path).CreateInstance(className);
         }
 
-       
     }
 }

@@ -27,5 +27,10 @@ namespace PetShop.BLL
         {
             throw new System.NotImplementedException();
         }
+
+        public void Delete(int orderId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

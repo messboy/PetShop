@@ -36,19 +36,25 @@ namespace PetShop.BLL {
 
         public void Update(Model.OrderInfo order)
         {
-            dal.Update(order);
-            //using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required))
-            //{
-            //    dal.Update(order);
+            //dal.Update(order);
+            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required))
+            {
+                dal.Update(order);
 
-            //    // Update the inventory to reflect the current inventory after the order submission
-            //    //Inventory inventory = new Inventory();
-            //    //inventory.TakeStock(order.LineItems);
+                // Update the inventory to reflect the current inventory after the order submission
+                //Inventory inventory = new Inventory();
+                //inventory.TakeStock(order.LineItems);
 
-            //    // Calling Complete commits the transaction.
-            //    // Excluding this call by the end of TransactionScope's scope will rollback the transaction
-            //    ts.Complete();
-            //}
+                // Calling Complete commits the transaction.
+                // Excluding this call by the end of TransactionScope's scope will rollback the transaction
+                ts.Complete();
+            }
+        }
+
+
+        public void Delete(int orderId)
+        {
+            dal.Delete(orderId);
         }
     }
 }

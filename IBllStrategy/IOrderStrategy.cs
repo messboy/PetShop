@@ -11,5 +11,7 @@ namespace PetShop.IBLLStrategy
         void Insert(PetShop.Model.OrderInfo order);
 
         void Update(PetShop.Model.OrderInfo order);
+
+        void Delete(int orderId);
     }
 }

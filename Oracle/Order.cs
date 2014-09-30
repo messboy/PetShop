@@ -231,5 +231,16 @@ namespace PetShop.OracleDAL {
         {
             throw new NotImplementedException();
         }
+
+
+        public List<OrderInfo> GetOrderByUserId(string UserId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int orderId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,11 +11,19 @@ namespace PetShop.SQLServerDAL {
 
     public class Order : IOrder {
 
+
         //Static constants
         private const string SQL_INSERT_ORDER = "Declare @ID int; Declare @ERR int; INSERT INTO Orders VALUES(@UserId, @Date, @ShipAddress1, @ShipAddress2, @ShipCity, @ShipState, @ShipZip, @ShipCountry, @BillAddress1, @BillAddress2, @BillCity, @BillState, @BillZip, @BillCountry, 'UPS', @Total, @BillFirstName, @BillLastName, @ShipFirstName, @ShipLastName, @AuthorizationNumber, 'US_en', @BillEmail, @BillPhone, @ShipEmail, @ShipPhone); SELECT @ID=@@IDENTITY; INSERT INTO OrderStatus VALUES(@ID, @ID, GetDate(), 'P'); SELECT @ERR=@@ERROR;";
         private const string SQL_INSERT_ITEM = "INSERT INTO LineItem VALUES( ";
         private const string SQL_SELECT_ORDER = "SELECT o.OrderDate, o.UserId, o.BillToFirstName, o.BillToLastName, o.BillAddr1, o.BillAddr2, o.BillCity, o.BillState, BillZip, o.BillCountry, o.ShipToFirstName, o.ShipToLastName, o.ShipAddr1, o.ShipAddr2, o.ShipCity, o.ShipState, o.ShipZip, o.ShipCountry, o.TotalPrice, o.BillEmail, o.BillPhone, o.ShipEmail, o.ShipPhone, l.ItemId, l.LineNum, l.Quantity, l.UnitPrice FROM Orders as o, lineitem as l WHERE o.OrderId = @OrderId AND o.orderid = l.orderid";
-
+        private const string SQL_SELECT_USER_ORDER = @"SELECT DISTINCT o.OrderId, o.OrderDate, o.UserId,  o.BillToFirstName, 
+    o.BillToLastName, o.BillAddr1, o.BillAddr2, 
+    o.BillCity, o.BillState, BillZip, o.BillCountry, 
+    o.ShipToFirstName, o.ShipToLastName, o.ShipAddr1, 
+    o.ShipAddr2, o.ShipCity, o.ShipState, o.ShipZip, 
+    o.ShipCountry, o.TotalPrice
+    FROM Orders as o
+    WHERE o.UserId = @UserId ";
         public const string SQL_UPDATE_ORDER = @"UPDATE [MSPetShop4Orders].[dbo].[Orders]
    SET 
       [ShipAddr1] = @ShipAddress1
@@ -42,6 +50,8 @@ namespace PetShop.SQLServerDAL {
       ,[ShipEmail] = @ShipEmail
       ,[ShipPhone] = @ShipPhone
         WHERE OrderId = @OrderId";
+
+
 
         private const string PARM_USER_ID = "@UserId";
         private const string PARM_DATE = "@Date";
@@ -308,6 +318,80 @@ namespace PetShop.SQLServerDAL {
             return order;
         }
 
+        public List<OrderInfo> GetOrderByUserId(string UserId)
+        {
+            List<OrderInfo> orderList = new List<OrderInfo>();
+
+            SqlParameter parm = new SqlParameter("@UserId", SqlDbType.VarChar) { Value = UserId };
+            try
+            {
+                using (SqlDataReader rdr = SqlHelper.ExecuteReader(SqlHelper.ConnectionStringOrderDistributedTransaction, CommandType.Text, SQL_SELECT_USER_ORDER, parm))
+                {
+                    while (rdr.Read())
+                    {
+                        //Generate an order header from the first row
+                        AddressInfo billingAddress = new AddressInfo(null, null, rdr.GetString(5), null, null, null, null, null, null, "email");
+                        AddressInfo shippingAddress = new AddressInfo(null, null, rdr.GetString(13), null, null, null, null, null, null, "email");
+
+                        OrderInfo cat = new OrderInfo(rdr.GetInt32(0), rdr.GetDateTime(1), rdr.GetString(2), null, billingAddress, shippingAddress, rdr.GetDecimal(19), null, null);
+                        orderList.Add(cat);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return orderList;
+        }
+
+
+        public void Delete(int orderId)
+        {
+            string str1 = @"DELETE LineItem where OrderId = @OrderId;"; // SQL command 1
+
+            string str2 = @"DELETE OrderStatus where OrderId = @OrderId;"; // SQL command 2
+
+            string str3 = @"DELETE Orders where OrderId = @OrderId;"; // SQL command 3
+
+
+            SqlConnection conn = new SqlConnection(SqlHelper.ConnectionStringOrderDistributedTransaction);
+            SqlCommand delCommand = new SqlCommand(str1, conn);
+            SqlParameter param = new SqlParameter("@OrderId", orderId);
+            delCommand.Parameters.Add(param);
+
+            conn.Open();
+            SqlTransaction trans = conn.BeginTransaction();
+            delCommand.Transaction = trans;
+
+            try
+            {
+                delCommand.ExecuteNonQuery();
+                delCommand.CommandText = str2;
+                delCommand.CommandType = CommandType.Text;
+                delCommand.ExecuteNonQuery();
+                delCommand.CommandText = str3;
+                delCommand.CommandType = CommandType.Text;
+                delCommand.ExecuteNonQuery();
+
+                trans.Commit();
+            } // try
+            catch (Exception excep)
+            {
+                trans.Rollback();  // 出現例外就ROLLBACK
+            } // catch
+            finally
+            {
+                conn.Close();
+                delCommand.Dispose();
+                conn.Dispose();
+                trans.Dispose();
+            } // finally
+        }
+
         /// <summary>
         /// Internal function to get cached parameters
         /// </summary>
@@ -365,8 +449,5 @@ namespace PetShop.SQLServerDAL {
         }
 
 
-
-
-        
     }
 }
