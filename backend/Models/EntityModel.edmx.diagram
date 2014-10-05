@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2d6a67c7d724400b806d4adaf10fb295" Name="Diagram1">
+        <EntityTypeShape EntityType="MSPetShop4Model.Category" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSPetShop4Model.Item" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSPetShop4Model.Product" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="MSPetShop4Model.FK__Product__Categor__0CBAE877" ManuallyRouted="false" />
+        <AssociationConnector Association="MSPetShop4Model.FK__Item__ProductId__117F9D94" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MSPetShop4Model.Supplier" Width="1.5" PointX="7.625" PointY="0.875" />
+        <AssociationConnector Association="MSPetShop4Model.FK__Item__Supplier__1273C1CD" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
