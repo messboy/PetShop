@@ -158,10 +158,36 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Comm_Images\bg-body.gif" />
+    <Content Include="Comm_Images\bg-labelLists.gif" />
+    <Content Include="Comm_Images\bg-search.gif" />
+    <Content Include="Comm_Images\bg-sign-in.gif" />
+    <Content Include="Comm_Images\button-back.gif" />
+    <Content Include="Comm_Images\button-calculate.gif" />
+    <Content Include="Comm_Images\button-cart-grey.gif" />
+    <Content Include="Comm_Images\button-cart.gif" />
+    <Content Include="Comm_Images\button-checkout.gif" />
+    <Content Include="Comm_Images\button-continue.gif" />
+    <Content Include="Comm_Images\button-delete.gif" />
+    <Content Include="Comm_Images\button-home.gif" />
+    <Content Include="Comm_Images\button-search.gif" />
+    <Content Include="Comm_Images\button-wishlist-grey.gif" />
+    <Content Include="Comm_Images\button-wishlist.gif" />
+    <Content Include="Comm_Images\dotten-line.gif" />
+    <Content Include="Comm_Images\home-bg-body.gif" />
+    <Content Include="Comm_Images\home-fish.gif" />
+    <Content Include="Comm_Images\Logo-home.gif" />
+    <Content Include="Comm_Images\Logo.gif" />
+    <Content Include="Comm_Images\seahorse.gif" />
+    <Content Include="Comm_Images\spacer.gif" />
+    <Content Include="Comm_Images\vertigo-icon.gif" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Img\home-fish.gif" />
     <Content Include="Content\Img\Logo-home.gif" />
+    <Content Include="Content\Img\Logo.gif" />
+    <Content Include="Content\Img\seahorse.gif" />
+    <Content Include="Content\StyleSheet.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
