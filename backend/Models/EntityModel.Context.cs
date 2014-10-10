@@ -29,5 +29,7 @@ namespace backend.Models
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<Inventory> Inventories { get; set; }
+        public virtual DbSet<SystemUser> SystemUsers { get; set; }
     }
 }

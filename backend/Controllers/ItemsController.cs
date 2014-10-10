@@ -53,7 +53,12 @@ namespace backend.Controllers
         {
             if (ModelState.IsValid)
             {
+                Inventory inventory = new Inventory();
+                inventory.ItemId = item.ItemId;
+                inventory.Qty = 10000;
+
                 db.Items.Add(item);
+                db.Inventories.Add(inventory);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -119,7 +124,10 @@ namespace backend.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             Item item = db.Items.Find(id);
+            Inventory inventory = db.Inventories.Find(id);
+
             db.Items.Remove(item);
+            db.Inventories.Remove(inventory);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

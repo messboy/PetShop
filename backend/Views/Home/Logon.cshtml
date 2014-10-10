@@ -1,0 +1,87 @@
+﻿@model backend.ViewModel.LogonViewModel
+@{
+    ViewBag.Title = "Logon";
+}
+
+<h2>Logon</h2>
+
+@using (Html.BeginForm("Logon", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.ValidationMessage("LogOnError", new { @class = "text-danger" })
+    
+    <br /><br /><br />
+    <table border="0" align="center" width="500" style="background-color: white">
+        <tr>
+            <td>
+                <div align="center" class="signinPosition">
+                    <table border="0" cellpadding="0">
+                        <tr>
+                            <td align="left" class="signinHeader" colspan="2">
+                                Please
+                                Sign In
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" class="signinLabel">
+                                <label id="ctl00_cphPage_Login_UserNameLabel">User Name:</label>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Account, new { @class = ""})
+                                @Html.ValidationMessageFor(m => m.Account, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" class="signinLabel">
+                                <label id="ctl00_cphPage_Login_PasswordLabel">Password:</label>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Password, new { @class = "" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" colspan="2" style="color: red">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" colspan="2">
+                                <input class="signinButton" type="submit" value="Sign In" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" colspan="2" style="height: 50px">
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.Remember)
+                                        @Html.LabelFor(m => m.Remember, new {@class = "colorBlue"})
+                                    </label>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr></tr>
+                    </table>
+                </div>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="footer">
+                <table width="100%">
+                    <tbody>
+                        <tr>
+                            <td>Version 4.0 - Powered by .NET</td>
+                            <td align="right" style="padding-right: 5px">
+                                <a href="http://www.vertigosoftware.com" target="_blank"><img alt="Created by Vertigo Software, Inc." border="0" src="/Comm_Images/vertigo-icon.gif"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+}
