@@ -7,18 +7,25 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using backend.Models;
+using PagedList;
 
 namespace backend.Controllers
 {
     public class ItemsController : Controller
     {
         private MSPetShop4Entities db = new MSPetShop4Entities();
+        private int pageSize = 5;   //分頁數量
 
         // GET: Items
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var items = db.Items.Include(i => i.Product).Include(i => i.Supplier1);
-            return View(items.ToList());
+            //目前所屬頁數
+            int currentPage = page < 1 ? 1 : page;
+
+            var items = db.Items.Include(i => i.Product).Include(i => i.Supplier1).OrderBy(x => x.ItemId);
+
+            var result = items.ToPagedList(currentPage, pageSize);
+            return View(result);
         }
 
         // GET: Items/Details/5

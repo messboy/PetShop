@@ -7,18 +7,24 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using backend.Models;
+using PagedList;
 
 namespace backend.Controllers
 {
     public class ProductsController : Controller
     {
         private MSPetShop4Entities db = new MSPetShop4Entities();
+        private int pageSize = 10;
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var products = db.Products.Include(p => p.Category);
-            return View(products.ToList());
+            int currentPage = page < 1 ? 1 : page;
+
+
+            var products = db.Products.Include(p => p.Category).OrderBy(x => x.CategoryId);
+            var result = products.ToPagedList(currentPage, pageSize);
+            return View(result);
         }
 
         // GET: Products/Details/5
