@@ -17,13 +17,18 @@ namespace backend.Controllers
         private int pageSize = 5;   //分頁數量
 
         // GET: Items
-        public ActionResult Index(int page = 1)
+        public ActionResult Index(string keyword, int page = 1)
         {
             //目前所屬頁數
             int currentPage = page < 1 ? 1 : page;
 
-            var items = db.Items.Include(i => i.Product).Include(i => i.Supplier1).OrderBy(x => x.ItemId);
+            var items = db.Items.Include(i => i.Product).Include(i => i.Supplier1).OrderBy(x => x.ItemId).AsQueryable();
 
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                items = items.Where(x => x.Name.Contains(keyword));
+                ViewBag.Keyword = keyword;
+            }
             var result = items.ToPagedList(currentPage, pageSize);
             return View(result);
         }

@@ -58,7 +58,7 @@ namespace backend.Controllers
                     }
                     Response.Cookies.Add(cookie);
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index","Categories");
                 }
                 ModelState.AddModelError("LogOnError", "請輸入正確的帳號或密碼");
             }

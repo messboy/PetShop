@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using backend.Models;
@@ -17,12 +19,18 @@ namespace backend.Controllers
         private int pageSize = 10;
 
         // GET: Products
-        public ActionResult Index(int page = 1)
+        public ActionResult Index(string keyword, int page = 1  )
         {
             int currentPage = page < 1 ? 1 : page;
 
+            IQueryable<Product> products = db.Products.Include(p => p.Category).OrderBy(x => x.CategoryId);
 
-            var products = db.Products.Include(p => p.Category).OrderBy(x => x.CategoryId);
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                products = products.Where(x => x.Name.Contains(keyword));
+                ViewBag.Keyword = keyword;
+            }
+
             var result = products.ToPagedList(currentPage, pageSize);
             return View(result);
         }
@@ -88,16 +96,40 @@ namespace backend.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,CategoryId,Name,Descn,Image")] Product product)
+        public ActionResult Edit(Product product, HttpPostedFileBase upload)
         {
+
             if (ModelState.IsValid)
             {
+                CheckFiles(upload);
+                HandleFiles(product, upload);
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
+        }
+
+
+        private void HandleFiles(Product product, HttpPostedFileBase upload)
+        {
+            if (upload != null)
+            {
+                //指定檔案存放位置
+                var path = string.Concat("~/Prod_Images/", "Birds", "/", upload.FileName);
+                var filepath = Server.MapPath(string.Concat("~/Prod_Images/", "Birds", "/")).Replace("Backend", "Web");
+
+
+                if (!Directory.Exists(filepath))
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+
+                upload.SaveAs(Path.Combine(filepath, upload.FileName));
+                product.Image = path;
+            }
+                
         }
 
         // GET: Products/Delete/5
@@ -125,6 +157,19 @@ namespace backend.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        private void CheckFiles(HttpPostedFileBase upload)
+        {
+
+                    //檢查檔名
+                    //檢查格式
+                    if (upload != null && !Regex.IsMatch(upload.FileName, @"\.(jpg|jpeg|gif|png)$"))
+                    {
+                        ModelState.AddModelError("Upload", "僅可上傳圖片檔");
+                    }
+        }
+
+      
 
         protected override void Dispose(bool disposing)
         {

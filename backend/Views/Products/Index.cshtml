@@ -2,52 +2,66 @@
 
 @{
     ViewBag.Title = "Index";
+    
 }
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Descn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Image)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model) {
+<div class="Paging">
+    <p>
+        @Html.ActionLink("Create New", "Create")
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "form-inline form-search pull-right" }))
+        {
+            @Html.TextBox("Keyword", (string)ViewBag.Keyword)
+            @Html.Hidden("Page", 1)
+            @Html.Hidden("Count", 20)
+            <input type="submit" name="name" value="查詢" class="" />
+        }
+    </p>
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ProductId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ProductId }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ProductId })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Descn)
+            </th>
+            <th>
+                Type
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src='http://localhost:2327@(item.Image.Replace("~", ""))' alt="" width="100px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descn)
+                </td>
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
+
