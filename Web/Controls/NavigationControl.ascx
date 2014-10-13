@@ -87,6 +87,14 @@
         var children = $('li.parent_li').find(' > ul > li');
         children.hide();
 
+        //顯示該頁面類別的選單
+        var categoryId = getParameterByName("categoryId");
+        console.log(categoryId);
+        if (categoryId != "") {
+            var target = $('.' + categoryId).find(' > ul > li');
+            target.show();
+        }
+
         //點擊事件
         $('.tree li.parent_li > span').on('click', function (e) {
             var children = $(this).parent('li.parent_li').find(' > ul > li');
@@ -100,6 +108,14 @@
             e.stopPropagation();
         });
     });
+
+    //讀取Query String參數內的值
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
 </script>
 <asp:PlaceHolder ID="nav" runat="server">
 <div class="tree well">
@@ -107,7 +123,7 @@
         <asp:Repeater ID="repCategories" runat="server" OnItemDataBound="repCategories_ItemDataBound">
             <ItemTemplate>
                  <asp:HiddenField runat="server" ID="hidCategoryId" Value='<%# Eval("Id") %>' />
-                <li>
+                <li class='<%# Eval("Id") %>'>
                     <span class="glyphicon glyphicon-star"><%# Eval("Name") %></span> <a href="<%# string.Format("../Products.aspx?page=0&categoryId={0}", Eval("Id")) %>"></a>
                     <ul>
                         <asp:Repeater ID="repChildCategories" runat="server">

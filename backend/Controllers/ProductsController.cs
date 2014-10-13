@@ -13,6 +13,7 @@ using PagedList;
 
 namespace backend.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private MSPetShop4Entities db = new MSPetShop4Entities();
@@ -62,10 +63,12 @@ namespace backend.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,CategoryId,Name,Descn,Image")] Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase upload)
         {
+            CheckFiles(upload);
             if (ModelState.IsValid)
             {
+                HandleFiles(product, upload);
                 db.Products.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -118,7 +121,7 @@ namespace backend.Controllers
             {
                 //指定檔案存放位置
                 var path = string.Concat("~/Prod_Images/", "Birds", "/", upload.FileName);
-                var filepath = Server.MapPath(string.Concat("~/Prod_Images/", "Birds", "/")).Replace("Backend", "Web");
+                var filepath = Server.MapPath(string.Concat("~/Prod_Images/", "Birds", "/")).Replace("backend", "Web");
 
 
                 if (!Directory.Exists(filepath))

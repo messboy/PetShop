@@ -10,6 +10,7 @@ using backend.Models;
 
 namespace backend.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private MSPetShop4Entities db = new MSPetShop4Entities();

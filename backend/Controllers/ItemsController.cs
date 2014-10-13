@@ -75,7 +75,7 @@ namespace backend.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "CategoryId", item.ProductId);
+            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductId", item.ProductId);
             ViewBag.Supplier = new SelectList(db.Suppliers, "SuppId", "Name", item.Supplier);
             return View(item);
         }
@@ -92,7 +92,7 @@ namespace backend.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "CategoryId", item.ProductId);
+            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductId", item.ProductId);
             ViewBag.Supplier = new SelectList(db.Suppliers, "SuppId", "Name", item.Supplier);
             return View(item);
         }
